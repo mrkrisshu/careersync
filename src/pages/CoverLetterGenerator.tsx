@@ -50,13 +50,16 @@ const CoverLetterGenerator = () => {
   const handleInputChange = (field: string, value: string) => {
     if (field.includes('.')) {
       const [parent, child] = field.split('.')
-      setFormData(prev => ({
-        ...prev,
-        [parent]: {
-          ...prev[parent as keyof CoverLetterData],
-          [child]: value
+      setFormData(prev => {
+        const updated = { ...prev }
+        if (parent === 'personalInfo' && typeof updated.personalInfo === 'object') {
+          updated.personalInfo = {
+            ...updated.personalInfo,
+            [child]: value
+          }
         }
-      }))
+        return updated
+      })
     } else {
       setFormData(prev => ({
         ...prev,

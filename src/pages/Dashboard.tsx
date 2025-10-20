@@ -189,7 +189,7 @@ const Dashboard = () => {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-white mb-2">
-              Welcome back, {user?.user_metadata?.name || user?.email}!
+              Welcome back, {user?.name || user?.email}!
             </h1>
             <p className="text-slate-300">
               Here's your career optimization overview

@@ -104,6 +104,10 @@ interface FeatureItemProps {
   position: string;
 }
 
+interface HeroSectionProps {
+  onNavigateToSection?: (sectionId: string) => void;
+}
+
 interface LightningProps {
   hue?: number;
   xOffset?: number;
@@ -358,8 +362,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.5,
-        ease: "easeOut"
+        duration: 0.5
       }
     }
   };
