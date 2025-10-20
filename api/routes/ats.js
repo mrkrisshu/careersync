@@ -1,8 +1,8 @@
-const express = require('express')
-const multer = require('multer')
-const { GoogleGenerativeAI } = require('@google/generative-ai')
-const pdfParse = require('pdf-parse')
-const mammoth = require('mammoth')
+import express from 'express'
+import multer from 'multer'
+import { GoogleGenerativeAI } from '@google/generative-ai'
+import pdfParse from 'pdf-parse'
+import mammoth from 'mammoth'
 
 const router = express.Router()
 
@@ -191,4 +191,4 @@ router.get('/tips', (req, res) => {
   })
 })
 
-module.exports = router
+export default router

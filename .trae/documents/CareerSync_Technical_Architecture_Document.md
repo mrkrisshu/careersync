@@ -30,109 +30,127 @@ graph TD
 
 ## 2. Technology Description
 
-- **Frontend**: Next.js@14 + TypeScript + Tailwind CSS@3 + Recharts + Lucide React
-- **Backend**: Express.js@4 + TypeScript + bcrypt + jsonwebtoken
-- **Database**: Supabase (PostgreSQL)
-- **Authentication**: Supabase Auth (Email + Google OAuth)
-- **File Storage**: Supabase Storage
-- **AI Integration**: Google Gemini API (user-provided keys)
-- **Deployment**: Vercel (Frontend) + Railway/Render (Backend)
+* **Frontend**: Next.js\@14 + TypeScript + Tailwind CSS\@3 + Recharts + Lucide React
+
+* **Backend**: Express.js\@4 + TypeScript + bcrypt + jsonwebtoken
+
+* **Database**: Supabase (PostgreSQL)
+
+* **Authentication**: Supabase Auth (Email + Google OAuth)
+
+* **File Storage**: Supabase Storage
+
+* **AI Integration**: Google Gemini API (user-provided keys)
+
+* **Deployment**: Vercel (Frontend) + Railway/Render (Backend)
 
 ## 3. Route Definitions
 
-| Route | Purpose |
-|-------|---------|
-| / | Landing page with hero section and feature overview |
-| /auth/login | User authentication page with email and Google OAuth |
-| /auth/register | User registration page with email verification |
-| /dashboard | Main dashboard with navigation tabs and quick stats |
-| /builder | Resume builder with upload and AI tailoring features |
-| /ats-analysis | ATS scoring and improvement suggestions |
-| /cover-letter | AI-powered cover letter generator |
-| /tracker | Job application tracking and management |
-| /analytics | Performance metrics and trend analysis |
-| /settings | User profile and API key management |
+| Route          | Purpose                                              |
+| -------------- | ---------------------------------------------------- |
+| /              | Landing page with hero section and feature overview  |
+| /auth/login    | User authentication page with email and Google OAuth |
+| /auth/register | User registration page with email verification       |
+| /dashboard     | Main dashboard with navigation tabs and quick stats  |
+| /builder       | Resume builder with upload and AI tailoring features |
+| /ats-analysis  | ATS scoring and improvement suggestions              |
+| /cover-letter  | AI-powered cover letter generator                    |
+| /tracker       | Job application tracking and management              |
+| /analytics     | Performance metrics and trend analysis               |
+| /settings      | User profile and API key management                  |
 
 ## 4. API Definitions
 
 ### 4.1 Core API
 
 **Authentication**
+
 ```
 POST /api/auth/register
 ```
 
 Request:
-| Param Name | Param Type | isRequired | Description |
-|------------|------------|------------|-------------|
-| email | string | true | User email address |
-| password | string | true | User password (min 8 characters) |
-| name | string | true | User full name |
+
+| Param Name | Param Type | isRequired | Description                      |
+| ---------- | ---------- | ---------- | -------------------------------- |
+| email      | string     | true       | User email address               |
+| password   | string     | true       | User password (min 8 characters) |
+| name       | string     | true       | User full name                   |
 
 Response:
-| Param Name | Param Type | Description |
-|------------|------------|-------------|
-| success | boolean | Registration status |
-| user | object | User profile data |
-| token | string | JWT authentication token |
+
+| Param Name | Param Type | Description              |
+| ---------- | ---------- | ------------------------ |
+| success    | boolean    | Registration status      |
+| user       | object     | User profile data        |
+| token      | string     | JWT authentication token |
 
 **Resume Management**
+
 ```
 POST /api/resumes/upload
 ```
 
 Request:
-| Param Name | Param Type | isRequired | Description |
-|------------|------------|------------|-------------|
-| file | File | true | Resume file (PDF/DOCX) |
-| title | string | true | Resume title/name |
+
+| Param Name | Param Type | isRequired | Description            |
+| ---------- | ---------- | ---------- | ---------------------- |
+| file       | File       | true       | Resume file (PDF/DOCX) |
+| title      | string     | true       | Resume title/name      |
 
 Response:
-| Param Name | Param Type | Description |
-|------------|------------|-------------|
-| success | boolean | Upload status |
-| resume_id | string | Unique resume identifier |
-| extracted_text | string | Parsed resume content |
+
+| Param Name      | Param Type | Description              |
+| --------------- | ---------- | ------------------------ |
+| success         | boolean    | Upload status            |
+| resume\_id      | string     | Unique resume identifier |
+| extracted\_text | string     | Parsed resume content    |
 
 **AI Analysis**
+
 ```
 POST /api/ai/tailor-resume
 ```
 
 Request:
-| Param Name | Param Type | isRequired | Description |
-|------------|------------|------------|-------------|
-| resume_id | string | true | Resume identifier |
-| job_description | string | true | Target job description |
-| user_api_key | string | true | Encrypted Gemini API key |
+
+| Param Name       | Param Type | isRequired | Description              |
+| ---------------- | ---------- | ---------- | ------------------------ |
+| resume\_id       | string     | true       | Resume identifier        |
+| job\_description | string     | true       | Target job description   |
+| user\_api\_key   | string     | true       | Encrypted Gemini API key |
 
 Response:
-| Param Name | Param Type | Description |
-|------------|------------|-------------|
-| success | boolean | Analysis status |
-| tailored_resume | string | AI-optimized resume content |
-| ats_score | number | ATS compatibility score (0-100) |
-| improvements | array | List of suggested improvements |
+
+| Param Name       | Param Type | Description                     |
+| ---------------- | ---------- | ------------------------------- |
+| success          | boolean    | Analysis status                 |
+| tailored\_resume | string     | AI-optimized resume content     |
+| ats\_score       | number     | ATS compatibility score (0-100) |
+| improvements     | array      | List of suggested improvements  |
 
 **Job Tracking**
+
 ```
 POST /api/applications
 ```
 
 Request:
-| Param Name | Param Type | isRequired | Description |
-|------------|------------|------------|-------------|
-| company | string | true | Company name |
-| role | string | true | Job title/role |
-| resume_id | string | true | Associated resume |
-| job_description | string | false | Job description text |
-| status | string | true | Application status |
+
+| Param Name       | Param Type | isRequired | Description          |
+| ---------------- | ---------- | ---------- | -------------------- |
+| company          | string     | true       | Company name         |
+| role             | string     | true       | Job title/role       |
+| resume\_id       | string     | true       | Associated resume    |
+| job\_description | string     | false      | Job description text |
+| status           | string     | true       | Application status   |
 
 Response:
-| Param Name | Param Type | Description |
-|------------|------------|-------------|
-| success | boolean | Creation status |
-| application_id | string | Unique application identifier |
+
+| Param Name      | Param Type | Description                   |
+| --------------- | ---------- | ----------------------------- |
+| success         | boolean    | Creation status               |
+| application\_id | string     | Unique application identifier |
 
 ## 5. Server Architecture Diagram
 
@@ -243,6 +261,7 @@ erDiagram
 ### 6.2 Data Definition Language
 
 **Users Table**
+
 ```sql
 -- Create users table
 CREATE TABLE users (
@@ -270,6 +289,7 @@ GRANT ALL PRIVILEGES ON users TO authenticated;
 ```
 
 **Resumes Table**
+
 ```sql
 -- Create resumes table
 CREATE TABLE resumes (
@@ -299,6 +319,7 @@ GRANT ALL PRIVILEGES ON resumes TO authenticated;
 ```
 
 **Jobs Table**
+
 ```sql
 -- Create jobs table
 CREATE TABLE jobs (
@@ -326,6 +347,7 @@ GRANT ALL PRIVILEGES ON jobs TO authenticated;
 ```
 
 **Applications Table**
+
 ```sql
 -- Create applications table
 CREATE TABLE applications (
@@ -357,6 +379,7 @@ GRANT ALL PRIVILEGES ON applications TO authenticated;
 ```
 
 **Improvements Table**
+
 ```sql
 -- Create improvements table
 CREATE TABLE improvements (
@@ -384,6 +407,7 @@ GRANT ALL PRIVILEGES ON improvements TO authenticated;
 ```
 
 **Skills Missing Table**
+
 ```sql
 -- Create skills_missing table
 CREATE TABLE skills_missing (
@@ -415,3 +439,4 @@ INSERT INTO skills_missing (resume_id, skill, course_link, platform) VALUES
 ('sample-resume-id', 'Machine Learning', 'https://www.udemy.com/course/machinelearning/', 'Udemy'),
 ('sample-resume-id', 'Project Management', 'https://www.linkedin.com/learning/project-management-foundations', 'LinkedIn Learning');
 ```
+

@@ -1,14 +1,11 @@
-const express = require('express')
-const { createClient } = require('@supabase/supabase-js')
-const { GoogleGenerativeAI } = require('@google/generative-ai')
+import express from 'express'
+import { getSupabaseClient } from '../config/supabase.js'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 
 const router = express.Router()
 
 // Initialize Supabase client
-const supabase = createClient(
-  process.env.SUPABASE_URL || 'https://your-project.supabase.co',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || 'your-service-role-key'
-)
+const supabase = getSupabaseClient()
 
 // Get user profile
 router.get('/profile', async (req, res) => {
@@ -251,4 +248,4 @@ router.put('/notifications', async (req, res) => {
   }
 })
 
-module.exports = router
+export default router

@@ -1,83 +1,144 @@
 import { useState, useEffect } from 'react'
-import { User, Session } from '@supabase/supabase-js'
-import { supabase } from '../lib/supabase'
+
+export interface User {
+  id: string
+  email: string
+  name: string
+  picture: string
+  iat: number
+  exp: number
+}
+
+const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID' // Will be set from env
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null)
-  const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
+    // Check if user is already logged in (from localStorage or URL params)
+    const checkAuthStatus = async () => {
+      // Check localStorage for existing token
+      const token = localStorage.getItem('google_token')
+      if (token) {
+        try {
+          const decoded = parseJwt(token)
+          if (decoded && decoded.exp * 1000 > Date.now()) {
+            setUser(decoded as User)
+          } else {
+            localStorage.removeItem('google_token')
+          }
+        } catch {
+          localStorage.removeItem('google_token')
+        }
+      }
 
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
+      // Check for auth code from redirect
+      const params = new URLSearchParams(window.location.search)
+      const code = params.get('code')
+      if (code && !token) {
+        // Code exists but no token - exchange will happen on next page load
+      }
 
-    return () => subscription.unsubscribe()
+      setLoading(false)
+    }
+
+    checkAuthStatus()
   }, [])
 
-  const signUp = async (email: string, password: string, name: string) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          name,
-        },
-      },
-    })
-    return { data, error }
-  }
-
-  const signIn = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-    return { data, error }
-  }
-
   const signInWithGoogle = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/dashboard`,
-      },
-    })
-    return { data, error }
+    try {
+      // Get Google Client ID from environment
+      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID
+      
+      if (!clientId || clientId === 'YOUR_GOOGLE_CLIENT_ID') {
+        throw new Error(
+          'Google Client ID not configured. Please add VITE_GOOGLE_CLIENT_ID to your .env file'
+        )
+      }
+
+      const redirectUri = `${window.location.origin}/auth/callback`
+      
+      const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth')
+      authUrl.searchParams.append('client_id', clientId)
+      authUrl.searchParams.append('redirect_uri', redirectUri)
+      authUrl.searchParams.append('response_type', 'code')
+      authUrl.searchParams.append('scope', 'openid email profile')
+      authUrl.searchParams.append('access_type', 'offline')
+
+      // Redirect to Google OAuth
+      window.location.href = authUrl.toString()
+      
+      return { data: null, error: null }
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error(String(err))
+      return { data: null, error }
+    }
+  }
+
+  const exchangeCodeForToken = async (code: string) => {
+    try {
+      // Call your backend to exchange code for token
+      const response = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code })
+      })
+
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Authentication failed')
+      }
+
+      // Store token
+      localStorage.setItem('google_token', data.token)
+      
+      // Decode and set user
+      const decoded = parseJwt(data.token)
+      setUser(decoded as User)
+      
+      return { data, error: null }
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error(String(err))
+      return { data: null, error }
+    }
   }
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut()
-    return { error }
-  }
-
-  const resetPassword = async (email: string) => {
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    })
-    return { data, error }
+    try {
+      localStorage.removeItem('google_token')
+      setUser(null)
+      return { error: null }
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error(String(err))
+      return { error }
+    }
   }
 
   return {
     user,
-    session,
     loading,
-    signUp,
-    signIn,
     signInWithGoogle,
+    exchangeCodeForToken,
     signOut,
-    resetPassword,
+  }
+}
+
+// Helper function to parse JWT
+function parseJwt(token: string) {
+  try {
+    const base64Url = token.split('.')[1]
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    )
+    return JSON.parse(jsonPayload)
+  } catch (err) {
+    console.error('Failed to parse JWT:', err)
+    return null
   }
 }

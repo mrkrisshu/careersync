@@ -1,12 +1,9 @@
-const express = require('express')
-const { createClient } = require('@supabase/supabase-js')
+import express from 'express'
+import { getSupabaseClient } from '../config/supabase.js'
 const router = express.Router()
 
 // Initialize Supabase client
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-)
+const supabase = getSupabaseClient()
 
 // Get all job applications for a user
 router.get('/', async (req, res) => {
@@ -389,4 +386,4 @@ router.get('/stats', async (req, res) => {
   }
 })
 
-module.exports = router
+export default router

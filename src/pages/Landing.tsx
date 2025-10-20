@@ -10,15 +10,10 @@ import {
   CheckCircle, 
   ArrowRight,
   Star,
-  Users,
-  TrendingUp,
-  Phone,
-  MapPin,
   Clock,
   Award,
   Brain,
-  Sparkles,
-  IndianRupee
+  Sparkles
 } from 'lucide-react'
 import { HeroSection } from '../components/hero-odyssey'
 
@@ -211,89 +206,39 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Pricing Section */}
+      {/* Pricing Section - Now Free! */}
       <section ref={pricingRef} id="pricing" className="py-20 bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
-              Simple, Transparent Pricing
+              Completely Free, Forever
             </h2>
             <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-              Professional career optimization tools at an affordable price. No hidden fees, no surprises.
+              All features are completely free. No hidden fees, no upgrades required, no surprises.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Free Tier */}
-            <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-3xl p-8 border border-slate-600">
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-white mb-4">Free Tier</h3>
-                <div className="flex items-center justify-center mb-4">
-                  <span className="text-5xl font-bold text-white">₹0</span>
-                  <span className="text-slate-300 ml-2">/month</span>
-                </div>
-                <p className="text-slate-300">Perfect for trying out CareerSync</p>
-              </div>
-
-              <div className="space-y-4 mb-8">
-                <div className="flex items-start">
-                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
-                  <span className="text-slate-200 text-sm">5 AI prompts per month</span>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
-                  <span className="text-slate-200 text-sm">Basic resume analysis</span>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
-                  <span className="text-slate-200 text-sm">ATS score checking</span>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
-                  <span className="text-slate-200 text-sm">Job application tracking</span>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
-                  <span className="text-slate-200 text-sm">Basic analytics dashboard</span>
-                </div>
-              </div>
-
-              <div className="text-center">
-                <Link
-                  to="/register"
-                  className="w-full bg-slate-600 hover:bg-slate-500 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors flex items-center justify-center mb-4"
-                >
-                  Get Started Free
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Link>
-                <p className="text-xs text-slate-400">
-                  No credit card required
-                </p>
-              </div>
-            </div>
-
-            {/* Pro Tier */}
-            <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-3xl p-8 border-2 border-blue-500 relative overflow-hidden">
+          <div className="grid md:grid-cols-1 gap-8 max-w-2xl mx-auto">
+            {/* Free Plan */}
+            <div className="bg-gradient-to-br from-blue-900 to-blue-800 rounded-3xl p-8 border-2 border-blue-500 relative overflow-hidden">
               {/* Popular badge */}
-              <div className="absolute top-0 right-0 bg-blue-600 text-white px-4 py-2 rounded-bl-2xl text-sm font-semibold">
-                Most Popular
+              <div className="absolute top-0 right-0 bg-green-500 text-white px-4 py-2 rounded-bl-2xl text-sm font-semibold">
+                Forever Free
               </div>
               
               <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-white mb-4">CareerSync Pro</h3>
+                <h3 className="text-3xl font-bold text-white mb-4">CareerSync</h3>
                 <div className="flex items-center justify-center mb-4">
-                  <IndianRupee className="w-8 h-8 text-blue-400" />
-                  <span className="text-5xl font-bold text-white">299</span>
-                  <span className="text-slate-300 ml-2">/month</span>
+                  <span className="text-6xl font-bold text-green-400">Free</span>
                 </div>
-                <p className="text-slate-300">Everything you need to optimize your career</p>
+                <p className="text-slate-200 text-lg">All premium features included for everyone</p>
               </div>
 
               <div className="space-y-4 mb-8">
                 {pricingFeatures.map((feature, index) => (
                   <div key={index} className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-slate-200 text-sm">{feature}</span>
+                    <span className="text-slate-100 text-sm">{feature}</span>
                   </div>
                 ))}
               </div>
@@ -301,13 +246,13 @@ const Landing = () => {
               <div className="text-center">
                 <Link
                   to="/register"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors flex items-center justify-center mb-4"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors flex items-center justify-center mb-4"
                 >
-                  Upgrade to Pro
+                  Get Started Now - It's Free!
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
-                <p className="text-xs text-slate-400">
-                  * You provide your own Gemini API key - Zero AI costs for CareerSync
+                <p className="text-sm text-slate-300">
+                  ✨ You provide your own Gemini API key - Zero costs, complete control
                 </p>
               </div>
             </div>
@@ -348,7 +293,7 @@ const Landing = () => {
             {/* Business */}
             <div className="bg-slate-700 p-8 rounded-2xl text-center">
               <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Phone className="w-8 h-8 text-white" />
+                <Zap className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-white mb-3">Business Inquiries</h3>
               <p className="text-slate-300 mb-4">Partnerships, enterprise solutions, and business opportunities.</p>
